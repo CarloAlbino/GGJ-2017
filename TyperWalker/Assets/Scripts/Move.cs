@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class Move : MonoBehaviour {
 
+    [SerializeField, Tooltip("Jump strength")]
+    private float m_jumpPower = 10.0f;
+    [SerializeField, Tooltip("Walk speed")]
+    private float m_walkSpeed = 1.0f;
+
+    // Rigidbody reference
     private Rigidbody2D m_rb = null;
+    // Reference to the spawn keys object (Player)
     private SpawnKeys m_keys = null;
+    // Movement direction
     private Vector2 m_moveDirection = Vector2.zero;
-    public float m_jumpPower = 10.0f;
-    public float m_walkSpeed = 1.0f;
+    // Is the player grounded
     private bool m_isGrounded = false;
 
 	void Start ()
     {
+        // Grab the references
         m_rb = GetComponent<Rigidbody2D>();
         m_keys = GetComponent<SpawnKeys>();
 	}
@@ -24,12 +32,16 @@ public class Move : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        // Set player to grounded when hit the floor
         if(col.collider.tag == "Floor")
         {
             m_isGrounded = true;
         }
     }
 
+    /// <summary>
+    /// Calculate and set the player movement
+    /// </summary>
     private void Movement()
     {
         m_moveDirection = Vector2.zero;

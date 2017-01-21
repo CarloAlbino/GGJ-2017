@@ -4,7 +4,24 @@ using UnityEngine;
 
 public class SpawnKeys : MonoBehaviour {
 
-    public LetterParticle m_letterPrefab = null;
+    [SerializeField, Tooltip("Prefab of the letter particle")]
+    private LetterParticle m_letterPrefab = null;
+
+    [SerializeField, Tooltip("Delay before input is detected again")]
+    private float m_inputDelay = 0.4f;
+    // Count the current delay
+    private float m_currentCount = 0.0f;
+
+    [SerializeField, Tooltip("Position where the particle will spawn")]
+    private Transform m_spawnPosition = null;
+
+    // Movement direction
+    private bool m_rightPressed = false;
+    private bool m_leftPressed = false;
+
+    // Capitalize/Shift up the character
+    private bool m_isShifted = false;
+    // Array of all the keycodes
     private KeyCode[] m_keyArray = {KeyCode.A, KeyCode.B, KeyCode.C, KeyCode.D, KeyCode.E, KeyCode.F, KeyCode.G, KeyCode.Q, KeyCode.R,
                                     KeyCode.S, KeyCode.T, KeyCode.V, KeyCode.W, KeyCode.X, KeyCode.Z, KeyCode.Alpha1, KeyCode.Alpha2,
                                     KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha9,
@@ -12,31 +29,26 @@ public class SpawnKeys : MonoBehaviour {
                                     KeyCode.Slash, KeyCode.H, KeyCode.I,KeyCode.J, KeyCode.K, KeyCode.L, KeyCode.M, KeyCode.N, KeyCode.O,
                                     KeyCode.P, KeyCode.U, KeyCode.Y, KeyCode.Alpha0};
 
-    private bool m_isShifted = false;
-    public float m_repeatTimer = 0.4f;
-    private float m_currentCount = 0.0f;
-    public Transform m_spawnPosition = null;
-    private bool m_rightPressed = false;
-    private bool m_leftPressed = false;
-
     void Update ()
     {
+        // Set Caps Lock
         if(Input.GetKeyDown(KeyCode.CapsLock))
         {
             m_isShifted = !m_isShifted;
         }
 
+        // Set Shift
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
             m_isShifted = !m_isShifted;
         }
-
-        if(Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        else if(Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
         {
             m_isShifted = !m_isShifted;
         }
 
-        if (m_currentCount > m_repeatTimer)
+        // Calculate input delay
+        if (m_currentCount > m_inputDelay)
         {
             Detectinput();
             m_currentCount = 0;
@@ -47,6 +59,9 @@ public class SpawnKeys : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Detect the key being pressed and set the character string and movement direction
+    /// </summary>
     private void Detectinput()
     {
         m_rightPressed = false;
@@ -261,11 +276,19 @@ public class SpawnKeys : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Returns if the right keys are pressed
+    /// </summary>
+    /// <returns></returns>
     public bool IsRightPressed()
     {
         return m_rightPressed;
     }
 
+    /// <summary>
+    /// Returns if the left keys are pressed
+    /// </summary>
+    /// <returns></returns>
     public bool IsLeftPressed()
     {
         return m_leftPressed;
