@@ -10,6 +10,8 @@ public class WordZone : MonoBehaviour {
     private Color m_wordColour = Color.white;
     [SerializeField, Tooltip("The layer that the particles will change to when the correct letters enter the zone")]
     private int m_newLayerInt = 10;
+    [SerializeField, Tooltip("Glow")]
+    private GameObject m_glowObject = null;
 
     // Stores refereneces to the letters
     private List<LetterParticle> m_letters = new List<LetterParticle>();
@@ -17,11 +19,18 @@ public class WordZone : MonoBehaviour {
 	void Update ()
     {
         // if the word is complete set the colour of the letters to m_wordColour
-        if (m_word.Length <= 0)
+        if (m_glowObject.activeInHierarchy)
         {
-            foreach(LetterParticle l in m_letters)
+            if (m_word.Length <= 0)
             {
-                l.SetColour(m_wordColour);
+                foreach (LetterParticle l in m_letters)
+                {
+                    l.SetColour(m_wordColour);
+                    if (m_glowObject != null)
+                    {
+                        m_glowObject.SetActive(false);
+                    }
+                }
             }
         }
 	}

@@ -11,6 +11,8 @@ public class Move : MonoBehaviour {
 
     // Rigidbody reference
     private Rigidbody2D m_rb = null;
+    // Parallax reference
+    private FreeParallax m_parallax = null;
     // Reference to the spawn keys object (Player)
     private SpawnKeys m_keys = null;
     // Movement direction
@@ -23,6 +25,7 @@ public class Move : MonoBehaviour {
         // Grab the references
         m_rb = GetComponent<Rigidbody2D>();
         m_keys = GetComponent<SpawnKeys>();
+        m_parallax = FindObjectOfType<FreeParallax>();
 	}
 
 	void Update ()
@@ -45,7 +48,7 @@ public class Move : MonoBehaviour {
     private void Movement()
     {
         m_moveDirection = Vector2.zero;
-        m_moveDirection.y = m_rb.velocity.y;
+        //m_moveDirection.y = m_rb.velocity.y;
 
         if (m_keys.IsRightPressed())
         {
@@ -55,6 +58,24 @@ public class Move : MonoBehaviour {
         if(m_keys.IsLeftPressed())
         {
             m_moveDirection += Vector2.left * m_walkSpeed;
+        }
+
+        // Set the parallax speed
+        if(m_keys.IsRightPressed() && m_keys.IsLeftPressed())
+        {
+            m_parallax.Speed = 0;
+        }
+        else if(m_keys.IsRightPressed())
+        {
+            m_parallax.Speed = -1;
+        }
+        else if(m_keys.IsLeftPressed())
+        {
+            m_parallax.Speed = 1;
+        }
+        else
+        {
+            m_parallax.Speed = 0;
         }
 
         if (m_isGrounded)
