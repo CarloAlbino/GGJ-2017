@@ -14,6 +14,7 @@ public class Move : MonoBehaviour {
     private Animator m_animator = null;
     private FreeParallax m_parallax = null;
     private SpriteRenderer m_sprite = null;
+    private RandomJumpAudio m_jumpAudio = null;
     // Reference to the spawn keys object (Player)
     private SpawnKeys m_keys = null;
     // Movement direction
@@ -31,6 +32,7 @@ public class Move : MonoBehaviour {
         m_keys = GetComponent<SpawnKeys>();
         m_parallax = FindObjectOfType<FreeParallax>();
         m_sprite = GetComponentInChildren<SpriteRenderer>();
+        m_jumpAudio = GetComponentInChildren<RandomJumpAudio>();
 	}
 
 	void Update ()
@@ -91,6 +93,7 @@ public class Move : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 m_moveDirection += Vector2.up * m_jumpPower;
+                m_jumpAudio.JumpSound();
                 m_isGrounded = false;
             }
         }
