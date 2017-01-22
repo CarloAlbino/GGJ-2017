@@ -9,23 +9,28 @@ public class Move : MonoBehaviour {
     [SerializeField, Tooltip("Walk speed")]
     private float m_walkSpeed = 1.0f;
 
-    // Rigidbody reference
+    // Get references
     private Rigidbody2D m_rb = null;
-    // Parallax reference
+    private Animator m_animator = null;
     private FreeParallax m_parallax = null;
+    private SpriteRenderer m_sprite = null;
     // Reference to the spawn keys object (Player)
     private SpawnKeys m_keys = null;
     // Movement direction
     private Vector2 m_moveDirection = Vector2.zero;
     // Is the player grounded
     private bool m_isGrounded = false;
+    // is player moving right
+    private bool m_isMoveingRight = true;
 
 	void Start ()
     {
         // Grab the references
         m_rb = GetComponent<Rigidbody2D>();
+        m_animator = GetComponentInChildren<Animator>();
         m_keys = GetComponent<SpawnKeys>();
         m_parallax = FindObjectOfType<FreeParallax>();
+        m_sprite = GetComponentInChildren<SpriteRenderer>();
 	}
 
 	void Update ()
@@ -54,11 +59,13 @@ public class Move : MonoBehaviour {
         if (m_keys.IsRightPressed())
         {
             m_moveDirection += Vector2.right * m_walkSpeed;
+            m_isMoveingRight = true;
         }
 
         if(m_keys.IsLeftPressed())
         {
             m_moveDirection += Vector2.left * m_walkSpeed;
+            m_isMoveingRight = false;
         }
 
         // Set the parallax speed
@@ -88,5 +95,39 @@ public class Move : MonoBehaviour {
             }
         }
         m_rb.velocity = m_moveDirection;
+
+        // Set the sprite's scale and animation
+        if(m_isGrounded)
+        {
+            m_animator.SetBool("IsJumping", false);
+        }
+        else
+        {
+            m_animator.SetBool("IsJumping", true);
+        }
+
+        Vector2 tempDir = m_moveDirection;
+        tempDir.y = 0;
+        if (Mathf.Abs(tempDir.magnitude) > Mathf.Epsilon)
+        {
+            m_animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            m_animator.SetBool("IsWalking", false);
+        }
+
+        if (m_isMoveingRight)
+        {
+            Vector3 newScale = Vector3.one;
+            newScale *= Mathf.Abs(m_sprite.transform.localScale.x);
+            m_sprite.transform.localScale = newScale;
+        }
+        else
+        {
+            Vector3 newScale = Vector3.one;
+            newScale.x *= Mathf.Abs(m_sprite.transform.localScale.x) * -1;
+            m_sprite.transform.localScale = newScale;
+        }
     }
 }

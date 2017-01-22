@@ -12,6 +12,8 @@ public class WordZone : MonoBehaviour {
     private int m_newLayerInt = 10;
     [SerializeField, Tooltip("Glow")]
     private GameObject m_glowObject = null;
+    [SerializeField, Tooltip("CCan the word be only typed once?")]
+    private bool m_typeOnce = true;
 
     // Stores refereneces to the letters
     private List<LetterParticle> m_letters = new List<LetterParticle>();
@@ -47,23 +49,37 @@ public class WordZone : MonoBehaviour {
             {
                 if (m_word.ToLower()[i] == l.GetLetter()[0])
                 {
-                    // Add letter to the word zone
-                    l.StopDestruction();
-                    l.SetLayer(m_newLayerInt);
-                    m_letters.Add(l);
-
-                    // Remove letter from m_word
-                    string tempWord = "";
-                    foreach(char c in m_word.ToLower())
+                    if (m_typeOnce)
                     {
-                        if(c != l.GetLetter()[0])
+                        // Add letter to the word zone
+                        l.StopDestruction();
+                        l.SetLayer(m_newLayerInt);
+                        m_letters.Add(l);
+
+                        // Remove letter from m_word
+                        string tempWord = "";
+                        foreach (char c in m_word.ToLower())
                         {
-                            tempWord += c;
+                            if (c != l.GetLetter()[0])
+                            {
+                                tempWord += c;
+                            }
+                        }
+                        m_word = tempWord;
+
+                        break;
+                    }
+                    else
+                    {
+                        if (m_letters.Count < 15)
+                        {
+                            // Add letter to the word zone
+                            l.StopDestruction();
+                            l.SetLayer(m_newLayerInt);
+                            l.SetColour(m_wordColour);
+                            m_letters.Add(l);
                         }
                     }
-                    m_word = tempWord;
-
-                    break;
                 }
             }
         }
