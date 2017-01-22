@@ -38,7 +38,7 @@ public class Move : MonoBehaviour {
 	void Update ()
     {
         Movement();
-        Debug.Log(m_isGrounded);
+        //Debug.Log(m_isGrounded);
 	}
 
     void OnCollisionEnter2D(Collision2D col)
