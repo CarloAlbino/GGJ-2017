@@ -68,4 +68,20 @@ public class WordZone : MonoBehaviour {
             }
         }
     }
+
+    /// <summary>
+    /// Returns if the puzzle is complete.
+    /// </summary>
+    /// <returns>State of the puzzle completeness.</returns>
+    public bool IsPuzzleComplete()
+    {
+        if(m_word.Length <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

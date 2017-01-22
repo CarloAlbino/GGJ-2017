@@ -31,6 +31,7 @@ public class Move : MonoBehaviour {
 	void Update ()
     {
         Movement();
+        Debug.Log(m_isGrounded);
 	}
 
     void OnCollisionEnter2D(Collision2D col)
@@ -48,7 +49,7 @@ public class Move : MonoBehaviour {
     private void Movement()
     {
         m_moveDirection = Vector2.zero;
-        //m_moveDirection.y = m_rb.velocity.y;
+        m_moveDirection.y = m_rb.velocity.y;
 
         if (m_keys.IsRightPressed())
         {

@@ -44,6 +44,15 @@ public class LetterParticle : MonoBehaviour {
             // is it part of the word
             wz.CheckForWord(this);
         }
+
+        BasePuzzle bp = other.GetComponent<QuietPuzzle>();
+        if(bp != null)
+        {
+            Debug.Log("Done");
+            // Activate any special effects
+            bp.SpecialEffect(this);
+        }
+        
     }
 
     #region Public Functions
