@@ -47,7 +47,7 @@ public class WordZone : MonoBehaviour {
         {
             for (int i = 0; i < m_word.Length; i++)
             {
-                if (m_word.ToLower()[i] == l.GetLetter()[0])
+                if (m_word.ToLower()[i] == l.GetLetter().ToLower()[0])
                 {
                     if (m_typeOnce)
                     {
@@ -60,7 +60,7 @@ public class WordZone : MonoBehaviour {
                         string tempWord = "";
                         foreach (char c in m_word.ToLower())
                         {
-                            if (c != l.GetLetter()[0])
+                            if (c != l.GetLetter().ToLower()[0])
                             {
                                 tempWord += c;
                             }
